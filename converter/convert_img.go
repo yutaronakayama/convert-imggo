@@ -1,8 +1,8 @@
 package cvtimg
 
 import (
-	"fmt"
 	"image"
+	"image/png"
 	"os"
 )
 
@@ -12,8 +12,13 @@ import (
 //画像の書き出し
 //画像のクローズ
 
-func convertToPNG(src string, dst string, output_name string) error {
+func convertToPNG(src string, dst string) error {
 	file, err := os.Open(src)
+	if err != nil {
+		panic(err)
+	}
+
+	output, err := os.Open(dst)
 	if err != nil {
 		panic(err)
 	}
@@ -23,9 +28,11 @@ func convertToPNG(src string, dst string, output_name string) error {
 		panic(err)
 	}
 
-	bounds := img.Bounds()
+	err = png.Encode(output, img)
+	if err != nil {
+		panic(err)
+	}
 
-	fmt.Printf("%d px", bounds.Dx())
 	file.Close()
 
 	return err
