@@ -3,13 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/yutaronakayama/convert_imggo/converter"
 	"time"
 )
 
 func main() {
 	flag.Parse()
 	fmt.Printf("受け取った引数の確認：%v\n", flag.Args())
-	convert_imggo.convert.convertToPNG(flag.Args(0), flag.Args(1))
-	//convert.convertToPNG()
+	converter.ConvertToPNG("image/たかしゃべ.png")
 	fmt.Printf("Hello World Time: %v\n", time.Now())
 }

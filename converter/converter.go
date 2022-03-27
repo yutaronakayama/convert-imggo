@@ -3,37 +3,30 @@ package converter
 import (
 	"image"
 	"image/png"
+	"image/jpeg"
+	"bytes"
 	"os"
+	"net/http"
 )
 
-//画像のオープン
-//画像の読み込み
-//画像の変換
-//画像の書き出し
-//画像のクローズ
+func ConvertToPNG(image []byte) ([]byte, error) {
+	contentType = http.DetectContentType(image)
 
-func convertToPNG(src string, dst string) error {
-	file, err := os.Open(src)
-	if err != nil {
-		panic(err)
+	switch contentType{
+
+	case "image/png":
+		image, err := jpeg.Decode(bytes.NewReader(image))
+		if err != nil{
+			return nil, errors.Wrap(err, "cannot decode this image type.")
+		}
+		buf := new(bytes.Buffer)
+		if err := png.Encode(buf, img); err != nil {
+			return nil, errors.Wrap(err, "cannot encode this image png")
+		}
+		return buf.Bytes(), nil
+	default:
+		fmt.Println("cannot convert this file type.")
+
 	}
-
-	output, err := os.Open(dst)
-	if err != nil {
-		panic(err)
-	}
-
-	img, _, err := image.Decode(file)
-	if err != nil {
-		panic(err)
-	}
-
-	err = png.Encode(output, img)
-	if err != nil {
-		panic(err)
-	}
-
-	file.Close()
-
-	return err
+	return nil, fmt.Errorf("unable to convert this image.")
 }
