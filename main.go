@@ -17,14 +17,14 @@ Go Modulesを使ってみる
 import (
 	"flag"
 	"fmt"
-	"github.com/yutaronakayama/convert_imggo/converter_test"
+	"github.com/yutaronakayama/convert_imggo/converter"
 	"time"
 	"os"
 )
 
 func main() {
 	flag.Parse()
-    if err := converter_test.toJPEG(os.Stdin, os.Stdout); err != nil {
+    if err := converter.toJPEG(os.Stdin, os.Stdout); err != nil {
         fmt.Fprintf(os.Stderr, "jpeg: %v\n", err)
         os.Exit(1)
     }

@@ -1,3 +1,3 @@
-module github.com/yutaronakayama/convert_imggo
+module convert_imggo
 
 go 1.17

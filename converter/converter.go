@@ -1,32 +1,19 @@
 package converter
 
 import (
-	"image"
-	"image/png"
-	"image/jpeg"
-	"bytes"
-	"os"
-	"net/http"
+    "fmt"
+    "image"
+    "image/jpeg"
+    _ "image/png"
+    "io"
+    "os"
 )
 
-func ConvertToPNG(image []byte) ([]byte, error) {
-	contentType = http.DetectContentType(image)
-
-	switch contentType{
-
-	case "image/png":
-		image, err := jpeg.Decode(bytes.NewReader(image))
-		if err != nil{
-			return nil, errors.Wrap(err, "cannot decode this image type.")
-		}
-		buf := new(bytes.Buffer)
-		if err := png.Encode(buf, img); err != nil {
-			return nil, errors.Wrap(err, "cannot encode this image png")
-		}
-		return buf.Bytes(), nil
-	default:
-		fmt.Println("cannot convert this file type.")
-
-	}
-	return nil, fmt.Errorf("unable to convert this image.")
+func ToJPEG(in io.Reader, out io.Writer) error {
+    img, kind, err := image.Decode(in)
+    if err != nil {
+        return err
+    }
+    fmt.Fprintln(os.Stderr, "Input format =", kind)
+    return jpeg.Encode(out, img, &jpeg.Options{Quality: 95})
 }
