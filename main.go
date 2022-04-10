@@ -20,39 +20,40 @@ func main() {
 
 	//Flagでのオプション定義
 	var (
-		src = flag.String("src", "jpg", "please specify -src flag")
-		dst = flag.String("dst", "png", "please specify -dst flag")
-		dir = flag.String("dir", ".", "please specify -dir flag")
+		src = flag.String("src", "", "please specify -src flag")
+		dst = flag.String("dst", "", "please specify -dst flag")
+		dir = flag.String("dir", "", "please specify -dir flag")
 	)
 
 	flag.Parse()
 
 	//オプション引数チェック
-	if flag.NArg() != 0 && flag.NFlag() != 2 {
-		log.Fatal("main.go: 31 > Invalid Args. Please specify only two Flag options.")
+	if flag.NArg() != 0 && flag.NFlag() >= 2 {
+		log.Fatal("main.go: 31 > Invalid Args. Please specify three Flag options.")
 	}
 
 	//引数確認
 	fmt.Printf("Input image path：%s, Output image path：%s\n", *src, *dst)
 
-	args := flag.Args()
-
+	//args := flag.Args()
 	//ここ一つの関数にまとめることはできるのか？
 	//ファイル形式のチェック
-	str, err := converter.Check SrcImageType(*src)
-	if err != nil {
-		fmt.Printf("main.go 42 > invalid %s ErrorContent:%s\n", *str, err)
+	str, err_status := converter.CheckSrcImageType(*src)
+	if err_status != 0 {
+		fmt.Printf("main.go 42 > invalid %s ErrorContent:%s\n", str, err_status)
+		os.Exit(1)
 	}
 
 	//ファイル形式のチェック
-	str, err := converter.CheckDstImageType(*dst)
-	if err != nil {
-		fmt.Printf("main.go 48 > invalid %s ErrorContent:%s\n", *dst, err)
-
+	str, err_status = converter.CheckDstImageType(*dst)
+	if err_status != 0 {
+		fmt.Printf("main.go 48 > invalid %s ErrorContent:%s\n", dst, err_status)
+		os.Exit(1)
 	}
 	//画像の変換処理
 	err := converter.ConvertToPNG(*dir, *src, *dst)
-	if err != 0{
-		return err
+	if err != nil {
+		fmt.Println(err)
 	}
+	os.Exit(0)
 }
